@@ -113,6 +113,7 @@ class Prompt(BaseModel):
 class DialogAction(BaseModel):
     type: str | None = None
     slotToElicit: str | None = None
+    slotElicitationStyle: str | None = None
 
 
 class ProposedNextState(BaseModel):
