@@ -63,7 +63,7 @@ def format_for_channel[T: SessionAttributes](response: LexResponse[T], channel_s
     # On dumped_response['sessionState']['sessionAttributes'], convert all values to string
     dumped_response = formatted_response.model_dump(exclude_none=True, by_alias=True)
     _stringify_session_attributes(session_attributes=dumped_response)
-
+    print(f"dumped_response {dumped_response}")
     return dumped_response
 
 
