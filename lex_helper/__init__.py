@@ -56,6 +56,7 @@ from lex_helper.core.types import (
     SessionAttributes,
     SessionState,
     Transcription,
+    LexSSMLText,
 )
 from lex_helper.exceptions.handlers import handle_exceptions
 from lex_helper.formatters.buttons import Button
@@ -102,4 +103,5 @@ __all__ = [
     "set_locale",
     "SMSChannel",
     "Transcription",
+    "LexSSMLText",
 ]
