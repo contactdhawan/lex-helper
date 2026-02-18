@@ -21,7 +21,7 @@ from lex_helper.core.types import (
     SessionAttributes,
     SessionState,
     Transcription,
-    LexSSMLText,
+    LexSSML,
 )
 
 __all__ = [
@@ -45,5 +45,5 @@ __all__ = [
     "SessionState",
     "set_locale",
     "Transcription",
-    "LexSSMLText",
+    "LexSSML",
 ]

@@ -27,13 +27,13 @@ class LexPlainText(BaseModel):
     content: str | None = ""
     contentType: Literal["PlainText"] = "PlainText"  # noqa: N815
 
-class LexSSMLText(BaseModel):
+class LexSSML(BaseModel):
     content: str | None = ""
-    contentType: Literal["SSMLText"] = "SSMLText"  # noqa: N815
+    contentType: Literal["SSML"] = "SSML"  # noqa: N815
 
-class SSMLText(BaseModel):
+class SSML(BaseModel):
     content: str | None = ""
-    contentType: Literal["SSMLText"] = "SSMLText"
+    contentType: Literal["SSML"] = "SSML"
     title: str | None = ""
     subtitle: str | None = ""
 
@@ -56,7 +56,7 @@ class LexImageResponseCard(BaseModel):
 
 
 LexBaseResponse = Annotated[
-    LexPlainText | LexImageResponseCard | LexCustomPayload | LexSSMLText,
+    LexPlainText | LexImageResponseCard | LexCustomPayload | LexSSML,
     Field(discriminator="contentType"),
 ]
 
@@ -78,7 +78,7 @@ def parse_lex_response(data: dict[str, Any]) -> LexBaseResponse:
     elif content_type == "ImageResponseCard":
         return LexImageResponseCard(**data)
     elif content_type == "SSMLText":
-        return LexSSMLText(**data)
+        return LexSSML(**data)
     else:
         raise ValidationError("Invalid contentType", LexBaseResponse)
 
