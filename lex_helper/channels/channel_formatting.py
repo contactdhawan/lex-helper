@@ -14,6 +14,7 @@ from lex_helper.core.types import (
     LexResponse,
     PlainText,
     SessionAttributes,
+    LexSSMLText,
 )
 from lex_helper.utils.add_to_list import add_to_list
 
@@ -25,6 +26,7 @@ def format_for_channel[T: SessionAttributes](response: LexResponse[T], channel_s
         PlainText: _format_plain_text,
         LexPlainText: _format_plain_text,
         LexImageResponseCard: _format_image_card,
+        LexSSMLText: _format_ssml_text
     }
 
     channel = _get_channel(channel_string)
@@ -89,6 +91,14 @@ def _format_plain_text(
     formatted_messages: list[Any],
 ) -> list[Any]:
     return add_to_list(lst=formatted_messages, item=channel.format_plain_text(message))
+
+def _format_ssml_text(
+    message: LexSSMLText,
+    channel: Channel,
+    options_provided: list[str],
+    formatted_messages: list[Any],
+) -> list[Any]:
+    return add_to_list(lst=formatted_messages, item=channel.format_ssml_text(message))
 
 
 def _format_image_card(

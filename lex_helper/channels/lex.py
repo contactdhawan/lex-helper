@@ -10,6 +10,7 @@ from lex_helper.core.types import (
     LexImageResponseCard,
     LexMessages,
     LexPlainText,
+    LexSSMLText,
 )
 
 
@@ -25,6 +26,8 @@ class LexChannel(Channel):
         Returns:
             The formatted message string
         """
+        if isinstance(message, LexSSMLText):
+            return self.format_ssml_text(message)
         if isinstance(message, LexPlainText):
             return self.format_plain_text(message)
         if isinstance(message, LexImageResponseCard):
@@ -57,6 +60,20 @@ class LexChannel(Channel):
         """
         # For Lex, we can just use the base implementation
         return super().format_plain_text(message)
+
+    def format_ssml_text(self, message: LexSSMLText) -> LexBaseResponse:
+        """Format a Lex plain text message.
+
+        Overrides the base implementation to handle Lex-specific formatting.
+
+        Args:
+            message: The plain text message to format
+
+        Returns:
+            The formatted plain text
+        """
+        # For Lex, we can just use the base implementation
+        return super().format_ssml_text(message)
 
     def format_image_card(self, card: LexImageResponseCard) -> LexBaseResponse:
         """Format a Lex image response card.

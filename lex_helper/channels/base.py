@@ -11,6 +11,7 @@ from lex_helper.core.types import (
     LexImageResponseCard,
     LexMessages,
     LexPlainText,
+    LexSSMLText
 )
 
 
@@ -51,6 +52,18 @@ class Channel(ABC):
             The formatted plain text
         """
         return LexPlainText(content=message.content or "")
+
+    def format_ssml_text(self, message: LexSSMLText) -> LexBaseResponse:
+        """Format a plain text message.
+
+        Args:
+            message: The plain text message to format
+
+        Returns:
+            The formatted plain text
+        """
+        return LexSSMLText(content=message.content or "")
+
 
     def format_image_card(self, card: LexImageResponseCard) -> LexBaseResponse:
         """Format an image response card.
