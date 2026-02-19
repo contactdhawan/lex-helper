@@ -182,7 +182,7 @@ def elicit_intent[T: SessionAttributes](messages: LexMessages, lex_request: LexR
     )
 
 
-def elicit_slot[T: SessionAttributes](slot_to_elicit: LexSlot | str, messages: LexMessages, lex_request: LexRequest[T],slotElicitationStyle: str) -> LexResponse[T]:
+def elicit_slot[T: SessionAttributes](slot_to_elicit: LexSlot | str, messages: LexMessages, lex_request: LexRequest[T],slotElicitationStyle: str | None) -> LexResponse[T]:
     """
     Elicits a specific slot from the user by sending a message and updating session attributes.
 
@@ -213,17 +213,30 @@ def elicit_slot[T: SessionAttributes](slot_to_elicit: LexSlot | str, messages: L
 
     if "." in str(slot_name):
         raise Exception("SLOT PARSED INCORRECTLY")
-
-    response = LexResponse(
-        sessionState=SessionState(
-            activeContexts=active_contexts,
-            sessionAttributes=session_attributes,
-            intent=intent,
-            dialogAction=DialogAction(type="ElicitSlot", slotToElicit=str(slot_name), slotElicitationStyle=str(slotElicitationStyle)),
-        ),
-        requestAttributes={},
-        messages=messages,
-    )
+    
+    response = None
+    if slotElicitationStyle == None:
+        response = LexResponse(
+                sessionState=SessionState(
+                    activeContexts=active_contexts,
+                    sessionAttributes=session_attributes,
+                    intent=intent,
+                    dialogAction=DialogAction(type="ElicitSlot", slotToElicit=str(slot_name)),
+                ),
+                requestAttributes={},
+                messages=messages,
+            )
+    else:     
+        response = LexResponse(
+            sessionState=SessionState(
+                activeContexts=active_contexts,
+                sessionAttributes=session_attributes,
+                intent=intent,
+                dialogAction=DialogAction(type="ElicitSlot", slotToElicit=str(slot_name), slotElicitationStyle=str(slotElicitationStyle)),
+            ),
+            requestAttributes={},
+            messages=messages,
+        )
 
     return response
 
