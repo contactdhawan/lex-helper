@@ -210,7 +210,7 @@ def elicit_slot[T: SessionAttributes](slot_to_elicit: LexSlot | str, messages: L
         slot_name = slot_to_elicit.value
 
     session_attributes.previous_slot_to_elicit = (intent.name.replace("_", "") + "Slot") + "." + str(slot_name).upper()
-
+    print(f"session_attributes {session_attributes}")
     if "." in str(slot_name):
         raise Exception("SLOT PARSED INCORRECTLY")
     
@@ -237,7 +237,7 @@ def elicit_slot[T: SessionAttributes](slot_to_elicit: LexSlot | str, messages: L
             requestAttributes={},
             messages=messages,
         )
-
+    print(f"response {response}")
     return response
 
 
