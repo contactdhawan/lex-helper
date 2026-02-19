@@ -56,23 +56,39 @@ def get_sentiment[T: SessionAttributes](lex_request: LexRequest[T]) -> str | Non
     Raises:
     AttributeError: If the 'interpretations' attribute is missing or not a list.
     """
-    # Check if 'interpretations' attribute exists and it's a list
-    if not hasattr(lex_request, "interpretations"):
-        raise AttributeError("Invalid LexRequest: 'interpretations' attribute missing or not a list")
+    print("[FLOW - dialog.py - Added by Claude Haiku] get_sentiment called")
+    
+    try:
+        # Check if 'interpretations' attribute exists and it's a list
+        if not hasattr(lex_request, "interpretations"):
+            print("[ERROR - dialog.py - Added by Claude Haiku] Invalid LexRequest: interpretations attribute missing")
+            raise AttributeError("Invalid LexRequest: 'interpretations' attribute missing or not a list")
 
-    interpretations = lex_request.interpretations
-    if len(interpretations) > 0:
-        element = interpretations[0]
+        interpretations = lex_request.interpretations
+        print(f"[FLOW - dialog.py - Added by Claude Haiku] Found {len(interpretations)} interpretations")
+        
+        if len(interpretations) > 0:
+            element = interpretations[0]
 
-        # Check if 'sentimentResponse' attribute exists in 'element'
-        if not hasattr(element, "sentimentResponse"):
-            return None
+            # Check if 'sentimentResponse' attribute exists in 'element'
+            if not hasattr(element, "sentimentResponse"):
+                print("[FLOW - dialog.py - Added by Claude Haiku] No sentimentResponse found")
+                return None
 
-        if element.sentimentResponse:
-            sentiment = element.sentimentResponse.sentiment
-            logger.debug("We have a sentiment: %s", sentiment)
-            return sentiment
-    return None
+            if element.sentimentResponse:
+                sentiment = element.sentimentResponse.sentiment
+                print(f"[FLOW - dialog.py - Added by Claude Haiku] Sentiment found: {sentiment}")
+                logger.debug("We have a sentiment: %s", sentiment)
+                return sentiment
+        
+        print("[FLOW - dialog.py - Added by Claude Haiku] No sentiment available")
+        return None
+        
+    except Exception as e:
+        print(f"[ERROR - dialog.py - Added by Claude Haiku] Exception in get_sentiment: {type(e).__name__}: {str(e)}")
+        import traceback
+        print(f"[ERROR - dialog.py - Added by Claude Haiku] Traceback: {traceback.format_exc()}")
+        raise
 
 
 def remove_context(context_list: ActiveContexts, context_name: str) -> ActiveContexts:

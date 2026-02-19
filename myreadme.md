@@ -1,7 +1,7 @@
 - install python 3.12 sudo dnf install -y python3.12
 
 login into aws clodshell
-git clone my-git repo
+git clone my-git repo https://github.com/contactdhawan/lex-helper.git
 create a folder lex-lambda-layer ast same level as lex-helper
 cd lex-helper-layer
 python3.12 -m pip install /home/cloudshell-user/lex-helper -t python/lib/python3.12/site-packages/ --upgrade

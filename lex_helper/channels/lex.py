@@ -26,15 +26,30 @@ class LexChannel(Channel):
         Returns:
             The formatted message string
         """
-        if isinstance(message, LexSSML):
-            return self.format_ssml_text(message)
-        if isinstance(message, LexPlainText):
-            return self.format_plain_text(message)
-        if isinstance(message, LexImageResponseCard):
-            return self.format_image_card(message)
-        if isinstance(message, LexCustomPayload):  # type: ignore
-            return self.format_custom_payload(message)
-        return LexPlainText(content="Unsupported message type")
+        print(f"[FLOW - lex.py - Added by Claude Haiku] format_message called with type: {type(message).__name__}")
+        
+        try:
+            if isinstance(message, LexSSML):
+                print(f"[FLOW - lex.py - Added by Claude Haiku] Message is LexSSML, formatting...")
+                return self.format_ssml_text(message)
+            if isinstance(message, LexPlainText):
+                print(f"[FLOW - lex.py - Added by Claude Haiku] Message is LexPlainText, formatting...")
+                return self.format_plain_text(message)
+            if isinstance(message, LexImageResponseCard):
+                print(f"[FLOW - lex.py - Added by Claude Haiku] Message is LexImageResponseCard, formatting...")
+                return self.format_image_card(message)
+            if isinstance(message, LexCustomPayload):  # type: ignore
+                print(f"[FLOW - lex.py - Added by Claude Haiku] Message is LexCustomPayload, formatting...")
+                return self.format_custom_payload(message)
+            
+            print(f"[ERROR - lex.py - Added by Claude Haiku] Unsupported message type: {type(message).__name__}")
+            return LexPlainText(content="Unsupported message type")
+            
+        except Exception as e:
+            print(f"[ERROR - lex.py - Added by Claude Haiku] Exception in format_message: {type(e).__name__}: {str(e)}")
+            import traceback
+            print(f"[ERROR - lex.py - Added by Claude Haiku] Traceback: {traceback.format_exc()}")
+            raise
 
     def format_messages(self, messages: list[LexMessages]) -> list[LexBaseResponse]:
         """Format a list of Lex messages.
@@ -45,7 +60,17 @@ class LexChannel(Channel):
         Returns:
             List of formatted message strings
         """
-        return [self.format_message(message) for message in messages]
+        print(f"[FLOW - lex.py - Added by Claude Haiku] format_messages called with {len(messages)} messages")
+        
+        try:
+            result = [self.format_message(message) for message in messages]
+            print(f"[FLOW - lex.py - Added by Claude Haiku] Formatted {len(result)} messages successfully")
+            return result
+        except Exception as e:
+            print(f"[ERROR - lex.py - Added by Claude Haiku] Exception in format_messages: {type(e).__name__}: {str(e)}")
+            import traceback
+            print(f"[ERROR - lex.py - Added by Claude Haiku] Traceback: {traceback.format_exc()}")
+            raise
 
     def format_plain_text(self, message: LexPlainText) -> LexBaseResponse:
         """Format a Lex plain text message.
