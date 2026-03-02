@@ -29,6 +29,8 @@ from lex_helper.core.types import (
 
 logger = logging.getLogger(__name__)
 
+print("[FLOW - dialog.py - Added by Haiky] Module initialized")
+
 
 class PydanticEncoder(json.JSONEncoder):
     def default(self, o: Any):
@@ -36,6 +38,7 @@ class PydanticEncoder(json.JSONEncoder):
             return o.model_dump()
         return super().default(o)
 
+print("[FLOW - dialog.py - Added by Haiky] PydanticEncoder class defined")
 
 T = TypeVar("T", bound=SessionAttributes)
 
@@ -102,6 +105,7 @@ def remove_context(context_list: ActiveContexts, context_name: str) -> ActiveCon
     Returns:
     ActiveContexts: The updated list of active contexts without the specified context.
     """
+    print("[FLOW - dialog.py - Added by Haiky] remove_context called")
     if not context_list:
         return context_list
     new_context: ActiveContexts = []
@@ -121,6 +125,7 @@ def remove_inactive_context[T: SessionAttributes](lex_request: LexRequest[T]) ->
     Returns:
     ActiveContexts: The updated list of active contexts with inactive ones removed.
     """
+    print("[FLOW - dialog.py - Added by Haiky] remove_inactive_context called")
     context_list = lex_request.sessionState.activeContexts
     if not context_list:
         return context_list
@@ -143,6 +148,7 @@ def close[T: SessionAttributes](lex_request: LexRequest[T], messages: LexMessage
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] close called")
     intent, active_contexts, session_attributes, _ = get_request_components(lex_request)
 
     lex_request.sessionState.activeContexts = remove_inactive_context(lex_request)
@@ -175,6 +181,7 @@ def elicit_intent[T: SessionAttributes](messages: LexMessages, lex_request: LexR
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] elicit_intent called")
     intent, active_contexts, session_attributes, _ = get_request_components(lex_request=lex_request)
 
     active_contexts = remove_inactive_context(lex_request)
@@ -210,6 +217,7 @@ def elicit_slot[T: SessionAttributes](slot_to_elicit: LexSlot | str, messages: L
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] elicit_slot called")
     intent, active_contexts, session_attributes, _ = get_request_components(lex_request=lex_request)
     active_contexts = remove_inactive_context(lex_request)
     intent.state = "InProgress"
@@ -267,6 +275,7 @@ def delegate[T: SessionAttributes](lex_request: LexRequest[T]) -> LexResponse[T]
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] delegate called")
     logger.debug("Delegating")
 
     updated_active_contexts = remove_inactive_context(lex_request)
@@ -297,6 +306,7 @@ def get_provided_options(messages: LexMessages) -> str:
     Returns:
     str: A JSON-encoded list of the extracted button texts.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_provided_options called")
     options = [
         button.text
         for message in messages
@@ -321,6 +331,7 @@ def get_intent[T: SessionAttributes](lex_request: LexRequest[T]) -> Intent:
     Raises:
     ValueError: If no intent is found in the request.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_intent called")
     session_state = lex_request.sessionState
     if session_state:
         return session_state.intent
@@ -340,6 +351,7 @@ def get_slot(slot_name: LexSlot | str, intent: Intent, **kwargs: Any):
     Returns:
     Any: The value of the slot if available, otherwise None.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_slot called")
     try:
         if isinstance(slot_name, str):
             slot = intent.slots.get(slot_name)
@@ -371,6 +383,7 @@ def get_composite_slot(slot_name: str, intent: Intent, preference: str | None = 
     Raises:
         Exception: Any exception that occurs while fetching the slot.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_composite_slot called")
     subslot_dict: dict[str, Any] = {}
 
     # Get the slot from the intent
@@ -415,6 +428,7 @@ def get_slot_value(slot: dict[str, Any], **kwargs: Any):
     Returns:
     Any: The interpreted or original value of the slot if available, otherwise None.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_slot_value called")
     slot_value = slot.get("value")
     if slot_value:
         interpreted_value = slot_value.get("interpretedValue")
@@ -449,6 +463,7 @@ def set_subslot(
     Returns:
         Intent: The updated intent with the modified subslot value.
     """
+    print("[FLOW - dialog.py - Added by Haiky] set_subslot called")
 
     # Ensure the composite slot and its subSlots dictionary exist
     if composite_slot_name.value not in intent.slots:
@@ -485,6 +500,7 @@ def set_slot(slot_name: LexSlot, slot_value: str | None, intent: Intent) -> Inte
     Returns:
     Intent: The updated intent with the modified slot value.
     """
+    print("[FLOW - dialog.py - Added by Haiky] set_slot called")
     intent.slots[slot_name.value] = {
         "value": {
             "interpretedValue": slot_value,
@@ -508,6 +524,7 @@ def get_composite_slot_subslot(composite_slot: LexSlot, sub_slot: Any, intent: I
     Returns:
     Optional[str]: The value of the subslot if available, otherwise None.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_composite_slot_subslot called")
     try:
         slot = intent.slots[composite_slot.value]
         if not slot:
@@ -528,6 +545,7 @@ def get_active_contexts[T: SessionAttributes](lex_request: LexRequest[T]) -> Act
     Returns:
     ActiveContexts: The list of active contexts.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_active_contexts called")
     try:
         return lex_request.sessionState.activeContexts
     except Exception:
@@ -544,6 +562,7 @@ def get_invocation_label[T: SessionAttributes](lex_request: LexRequest[T]) -> st
     Returns:
     str: The invocation label.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_invocation_label called")
     logger.debug("Invocation Label: %s", lex_request.invocationLabel)
     return lex_request.invocationLabel
 
@@ -559,6 +578,7 @@ def safe_delete_session_attribute[T: SessionAttributes](lex_request: LexRequest[
     Returns:
     LexRequest: The updated LexRequest with the attribute deleted.
     """
+    print("[FLOW - dialog.py - Added by Haiky] safe_delete_session_attribute called")
     logger.debug("Deleting session attribute %s", attribute)
     if lex_request.sessionState.sessionAttributes and getattr(lex_request.sessionState.sessionAttributes, attribute):
         setattr(lex_request.sessionState.sessionAttributes, attribute, None)
@@ -577,6 +597,7 @@ def get_request_components[T: SessionAttributes](
     Returns:
     tuple: A tuple containing the intent, active contexts, session attributes, and invocation label.
     """
+    print("[FLOW - dialog.py - Added by Haiky] get_request_components called")
     intent = get_intent(lex_request)
     active_contexts = get_active_contexts(lex_request)
     session_attributes = lex_request.sessionState.sessionAttributes
@@ -602,6 +623,7 @@ def any_unknown_slot_choices[T: SessionAttributes](lex_request: LexRequest[T]) -
     Returns:
     bool: True if there are unknown slot choices, otherwise False.
     """
+    print("[FLOW - dialog.py - Added by Haiky] any_unknown_slot_choices called")
     intent, _, session_attributes, _ = get_request_components(lex_request)
 
     if "ElicitSlot" != session_attributes.previous_dialog_action_type:
@@ -646,6 +668,7 @@ def handle_any_unknown_slot_choice[T: SessionAttributes](lex_request: LexRequest
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] handle_any_unknown_slot_choice called")
     intent, _, session_attributes, _ = get_request_components(lex_request)
 
     logger.debug("Handle_Any_Unknown_Choice :: %s", session_attributes)
@@ -698,6 +721,7 @@ def unknown_choice_handler[T: SessionAttributes](
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] unknown_choice_handler called")
     return delegate(lex_request=lex_request)
 
 
@@ -736,6 +760,7 @@ def callback_original_intent_handler[T: SessionAttributes](
     Returns:
         LexResponse[T]: _description_
     """
+    print("[FLOW - dialog.py - Added by Haiky] callback_original_intent_handler called")
     logger.debug("Calling back original handler")
 
     callback_event = lex_request.sessionState.sessionAttributes.callback_event
@@ -781,6 +806,7 @@ def reprompt_slot[T: SessionAttributes](lex_request: LexRequest[T]) -> LexRespon
     Returns:
     LexResponse: The response object to be sent back to Lex.
     """
+    print("[FLOW - dialog.py - Added by Haiky] reprompt_slot called")
     logger.debug("Reprompting slot")
 
     session_attributes = lex_request.sessionState.sessionAttributes
@@ -805,6 +831,7 @@ def load_messages(messages: str) -> LexMessages:
     Returns:
     LexMessages: The list of LexMessages objects.
     """
+    print("[FLOW - dialog.py - Added by Haiky] load_messages called")
     res: LexMessages = []
     temp: list[Any] = json.loads(messages)
 
@@ -825,6 +852,7 @@ def load_messages(messages: str) -> LexMessages:
 
 
 def parse_req_sess_attrs[T: SessionAttributes](lex_payload: LexRequest[T]) -> LexRequest[T]:
+    print("[FLOW - dialog.py - Added by Haiky] parse_req_sess_attrs called")
     logger.debug("Lex-Payload: %s", lex_payload.model_dump_json(exclude_none=True))
     # parsing core_data from session-state from 2nd messages
 
@@ -868,24 +896,36 @@ def parse_lex_request[T: SessionAttributes](
     Returns:
     LexRequest[T]: The parsed LexRequest object.
     """
+    print("[FLOW - dialog.py - Added by Haiky] parse_lex_request called")
     # Create a copy of the data to modify
     data_copy = data.copy()
+    print("[FLOW - dialog.py - Added by Haiky] data_copy created")
 
     # If there are session attributes in the event, convert them to the proper model
     if data_copy.get("sessionState", {}).get("sessionAttributes"):
+        print("[FLOW - dialog.py - Added by Haiky] sessionAttributes found in event")
         event_attrs = data_copy["sessionState"]["sessionAttributes"]
+        print(f"[FLOW - dialog.py - Added by Haiky] event_attrs extracted: {type(event_attrs)}")
         # Create a new instance of the session attributes model with the event data
         model_attrs = type(session_attributes)(**event_attrs)
+        print("[FLOW - dialog.py - Added by Haiky] model_attrs created from event_attrs")
         data_copy["sessionState"]["sessionAttributes"] = model_attrs
+        print("[FLOW - dialog.py - Added by Haiky] data_copy sessionAttributes updated with model_attrs")
     else:
+        print("[FLOW - dialog.py - Added by Haiky] No sessionAttributes in event, using provided ones")
         # If no session attributes in event, use the provided ones
         if "sessionState" not in data_copy:
+            print("[FLOW - dialog.py - Added by Haiky] sessionState not in data_copy, creating it")
             data_copy["sessionState"] = {}
         data_copy["sessionState"]["sessionAttributes"] = session_attributes
+        print("[FLOW - dialog.py - Added by Haiky] data_copy sessionAttributes set to provided session_attributes")
 
     lex_request: LexRequest[T] = LexRequest(**data_copy)
+    print("[FLOW - dialog.py - Added by Haiky] LexRequest created from data_copy")
     lex_request.sessionState.activeContexts = remove_inactive_context(lex_request)  # Remove inactive contexts
+    print("[FLOW - dialog.py - Added by Haiky] inactive contexts removed")
     lex_request = parse_req_sess_attrs(lex_request)  # Parse Session Attributes
+    print("[FLOW - dialog.py - Added by Haiky] session attributes parsed")
     return lex_request
 
 
@@ -896,6 +936,7 @@ def transition_to_intent[T: SessionAttributes](
     invocation_label: str | None = None,
     clear_slots: bool = True,
 ) -> LexResponse[T]:
+    print("[FLOW - dialog.py - Added by Haiky] transition_to_intent called")
     if clear_slots:
         _clear_slots(intent_name=intent_name, lex_request=lex_request, invocation_label=invocation_label)
 
@@ -912,6 +953,7 @@ def transition_to_intent[T: SessionAttributes](
 def transition_to_callback[T: SessionAttributes](
     intent_name: str, lex_request: LexRequest[T], messages: LexMessages, clear_slots: bool = True
 ) -> LexResponse[T]:
+    print("[FLOW - dialog.py - Added by Haiky] transition_to_callback called")
     if clear_slots:
         _clear_slots(intent_name=intent_name, lex_request=lex_request)
     # If requestAttributes is None, create a new dictionary
@@ -925,6 +967,7 @@ def transition_to_callback[T: SessionAttributes](
 
 
 def _clear_slots[T: SessionAttributes](intent_name: str, lex_request: LexRequest[T], invocation_label: str | None = None):
+    print("[FLOW - dialog.py - Added by Haiky] _clear_slots called")
     lex_request.sessionState.intent.slots = {}
     lex_request.sessionState.intent.name = intent_name
 
