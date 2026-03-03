@@ -196,7 +196,7 @@ class SessionState[T: SessionAttributes](BaseModel):
 
 
 class ResolvedContext(BaseModel):
-    intent: str
+    intent: str | None = None
 
 
 class Transcription(BaseModel):
