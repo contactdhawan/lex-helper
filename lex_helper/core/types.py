@@ -97,7 +97,7 @@ class SentimentResponse(BaseModel):
 
 
 class Intent(BaseModel):
-    name: str
+    name: str | None = None # intent is coming as null when calling from connect
     slots: dict[str, Any | None] = {}
     state: str | None = None
     confirmationState: str | None = None
