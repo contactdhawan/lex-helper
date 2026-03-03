@@ -1,9 +1,12 @@
-- install python 3.12 sudo dnf install -y python3.12
+- install python 3.12 
+sudo dnf install -y python3.12
+sudo dnf install python3.12-pip
 
 login into aws clodshell
-git clone my-git repo https://github.com/contactdhawan/lex-helper.git
-create a folder lex-lambda-layer ast same level as lex-helper
-cd lex-helper-layer
+git clone https://github.com/contactdhawan/lex-helper.git
+create a folder lex-lambda-layer at same level as lex-helper
+mkdir lex-lambda-layer
+cd lex-lambda-layer
 python3.12 -m pip install /home/cloudshell-user/lex-helper -t python/lib/python3.12/site-packages/ --upgrade
 
 
@@ -37,3 +40,41 @@ aws lambda publish-layer-version \
     --zip-file fileb://lex-helper-layer.zip \
     --compatible-runtimes python3.12 \
     --compatible-architectures x86_64 arm64
+
+
+# when we make a phone call from amazon connect, we are getting transcription array where intent are blank
+```
+"transcriptions": [
+        {
+            "resolvedContext": {
+                "intent": "BirthdayInfo"
+            },
+            "resolvedSlots": {},
+            "transcriptionConfidence": 0.86,
+            "transcription": "birthday",
+            "rawTranscription": "birthday"
+        },
+        {
+            "resolvedContext": {},
+            "resolvedSlots": {},
+            "transcriptionConfidence": 0.6,
+            "transcription": "birthday day",
+            "rawTranscription": "birthday day"
+        },
+        {
+            "resolvedContext": {},
+            "resolvedSlots": {},
+            "transcriptionConfidence": 0.51,
+            "transcription": "but",
+            "rawTranscription": "but"
+        }
+    ]
+    ```
+to solve this I had to make intent as optional.
+```
+class Intent(BaseModel):
+    name: str | None = None # intent is coming as null when calling from connect
+    slots: dict[str, Any | None] = {}
+    state: str | None = None
+    confirmationState: str | None = None
+```
