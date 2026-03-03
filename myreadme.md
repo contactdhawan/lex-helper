@@ -41,7 +41,7 @@ aws lambda publish-layer-version \
     --compatible-runtimes python3.12 \
     --compatible-architectures x86_64 arm64
 
-
+# Issue # 1
 # when we make a phone call from amazon connect, we are getting transcription array where intent are blank
 ```
 "transcriptions": [
@@ -78,3 +78,9 @@ class Intent(BaseModel):
     state: str | None = None
     confirmationState: str | None = None
 ```
+
+# Issue # 2
+# No support for SAML
+
+# Issue 3
+# No support for slot type, like spell by word and spell by letter.
